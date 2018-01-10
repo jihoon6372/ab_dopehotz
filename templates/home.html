@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block head_title %}DOPEHOTZ - 로그인{% endblock %}
+{% block content %}
+<div id="container">
+    <div class="login_wrap">
+        <div class="login_inner">
+            {% if not user.is_authenticated %}
+            <h2>로그인</h2>
+            <p>#새로운_발견 #무한한_영감
+                <br>도파츠와 함께 하세요.</p>
+            <ul>
+                <li><a class="soundcloud_login" href="{%url "soundcloud_login" %}">사운드클라우드 로그인</a></li>
+                <li><a class="kakao_login" href="{%url "kakao_login" %}">카카오 로그인</a></li>
+                <li><a class="naver_login" href="{%url "naver_login" %}"">네이버 로그인</a></li>
+                <li><a class="facebook_login" href="{%url "facebook_login" %}">페이스북 로그인</a></li>
+            </ul>
+            {% else %}
+            <ul>
+                <li><a class="soundcloud_login" href="{% url "home_logout" %}">로그아웃</a></li>
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

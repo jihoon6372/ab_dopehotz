@@ -1,0 +1,9 @@
+{% load account %}{% user_display user as user_display %}{% load i18n %}{% autoescape off %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}안녕하세요 Dopehotz 입니다!
+
+회원님의 이메일로 Dopehotz에 가입한 사실이 있는지 확인 요청 드립니다.
+
+본인이 가입한 사실이 맞다면 이메일 인증을 진행해주세요.
+{{ activate_url }}
+{% endblocktrans %}{% endautoescape %}
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}감사합니다!
+Dopehotz {{ site_domain }}{% endblocktrans %}

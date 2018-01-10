@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+	localStorage.setItem('user', /access_token=(.*)&?/.exec(location.href)[1]);
+	self.close();
+</script>
+</body>
+</html>

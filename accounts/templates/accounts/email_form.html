@@ -1,0 +1,14 @@
+<!-- <form action="." method="POST" novalidate> -->
+<form action="." method="POST" novalidate>
+    {% csrf_token %}
+    <div class="form-list">
+        <label for="email">이메일</label>
+        <input class="base1 {% if form.errors.email %}error{% endif %}" type="email" name="email" id="email" required placeholder="이메일" value="{% if form.email.value %}{{ form.email.value }}{% endif %}">
+        {% if form.errors.email %}
+        <div class="error_msg1">{{form.errors.email}}</div>
+        {% endif %}
+    </div>
+    <div class="button-row qna-btn">
+        <button class="button button5">등록하기</button>
+    </div>
+</form>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://connect.soundcloud.com/sdk/sdk-3.3.0.js"></script>
+</head>
+<body>
+<script>
+SC.initialize({
+	client_id: '7c76b10fd87a3f9cf91d51b9f8cf069c',
+	redirect_uri: 'https://auth.dopehotz.com/callback/',
+});
+
+// initiate auth popup
+SC.connect().then(function() {
+	return SC.get('/me');
+}).then(function(me) {
+	alert('Hello, ' + me.username);
+});
+
+</script>
+</body>
+</html>

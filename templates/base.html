@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta name="theme-color" content="#242425" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="DOPEHOTZ">
+    <title>{% block head_title %}{% endblock %}</title>
+    <link rel="icon" sizes="192x192" href="/icon.png" />
+    <link rel="apple-touch-icon" href="/icon.png">
+    <meta name="msapplication-TileImage" content="icon.png">
+    <meta name="msapplication-TileColor" content="#2F3BA2">
+    {% load staticfiles %}
+    <link href="{% static 'css/base.css'%}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/case.css'%}" rel="stylesheet" type="text/css" />
+    <link rel="manifest" href="/manifest.json">
+    <script src="//code.jquery.com/jquery-latest.min.js"></script>
+    {% block extra_head %}
+    {% endblock %}
+</head>
+
+<body>
+  {% block body %}
+  <!-- PC 버전 헤더 -->
+    <div id="header">
+        <div class="header_width">
+            <a href="/">
+                <!-- <div class="logo">DOPEHOTZ</div>-->
+                <div class="logo"></div>
+            </a>
+        </div>
+    </div>
+    <!-- 모바일 버전 헤더 -->
+    <div id="header_m">
+        <a href="/">
+            <div class="logo_m"></div>
+        </a>
+    </div>
+    {% block content %}
+    {% endblock %}
+  {% endblock %}
+    <div id="footer" style="margin-bottom:0; ">
+        <p>copyright© DOPEHOTZ. all right reserved.</p>
+    </div>
+</body>
+
+</html>

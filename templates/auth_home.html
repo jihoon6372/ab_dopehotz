@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://connect.soundcloud.com/sdk/sdk-3.3.0.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
+<body>
+{% if messages %}
+<div>
+    <ul>
+    {% for message in messages %}
+        <li>{{message}}</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% load staticfiles %}
+{{user}}<br>
+<a href="{%url "soundcloud_login" %}"><img src="{%static 'images/btn-connect-sc-m.png'%}" alt=""></a>
+<!-- <a href="javascript: soundcloud_login();">soundcloud-javascript</a> -->
+<a href="{%url "kakao_login" %}">KAKAO</a>
+<a href="{%url "naver_login" %}">NAVER</a>
+<a href="{%url "facebook_login" %}">FACEBOOK</a>
+
+{% if user.is_authenticated %}
+<a href="{% url "home_logout" %}">Logout</a>
+{% endif %}
+
+<script>
+SC.initialize({
+	client_id: '7c76b10fd87a3f9cf91d51b9f8cf069c',
+	redirect_uri: 'https://auth.dopehotz.com/callback/',
+});
+
+function soundcloud_login(){
+    SC.connect().then(function() {
+        return SC.get('/me');
+    }).then(function(me) {
+        alert('Hello, ' + me.username);
+    });    
+}
+
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+redirectPost = function(location, args){
+    var form = '';
+    $.each( args, function( key, value ) {
+        value = value.split('"').join('\"')
+        form += '<input type="hidden" name="'+key+'" value="'+value+'">';
+    });
+    $('<form action="' + location + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
+}
+
+var reg = /access_token=(.*)[&?]/;
+if (reg.test(location.href)) {
+	redirectPost('#', {'oauth-token': reg.exec(location.href)[1], 'csrfmiddlewaretoken': getCookie('csrftoken')});
+}
+
+
+</script>
+</body>
+</html>

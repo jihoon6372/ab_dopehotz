@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+<head>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://connect.soundcloud.com/sdk/sdk-3.3.0.js"></script>
+
+	<title></title>
+</head>
+<body>
+	<div id="loading" style="display: none;">loading...</div>
+	<div class="test123"><a href="#" id="player-button">play/stop</a></div>
+	<div>
+		<span id="before">before</span> | <span id="next">next</span>
+	</div>
+	<div>
+		<span id="time" style="display: inline-block; width: 35px; text-align: left;">0:00</span> / <span id="total_time">0:00</span>
+	</div>
+	<div id="status"></div>
+	<div id="list-view" style="margin-top: 10px;"></div>
+	<input type="range" id="seek" name="" min="0" max="0" style="width: 500px;">
+<script>
+SC.initialize({
+ 	// client_id: '7c76b10fd87a3f9cf91d51b9f8cf069c'
+ 	client_id: 'N2eHz8D7GtXSl6fTtcGHdSJiS74xqOUI'
+});
+
+// console.log(player);
+// stream track id 293
+var track_list = [
+	328602933, 181882050, 181882298
+];
+
+
+var obj = {
+	'play' : false,
+	'track_count' : 0,
+	'track_id' : undefined
+};
+
+// document.getElementsByClassName('test123')[0].onclick = function(){
+// 	if (!obj.play) {
+// 		play(track_list[obj.track_count]);
+// 	}
+// }
+
+// function play2(){
+// 	SC.stream('/tracks/181882050').then(function(player){
+// 		player.play();
+// 	})
+// }
+
+function set_track_count(type){
+	switch(type){
+		case 'next':
+			if (track_list[obj.track_count+1] != undefined) {
+				obj.track_count++;
+			}else{
+				obj.track_count = 0;
+			}
+			break;
+
+		case 'before':
+			if (track_list[obj.track_count-1] != undefined) {
+				obj.track_count--;
+			}else{
+				obj.track_count = track_list.length-1;
+			}
+			break;
+	}
+}
+
+var autostart = false;
+
+window.onload = function(){
+	play();
+	// function play(){
+	// 	SC.stream('/tracks/'+track_list[obj.track_count]).then(function(player){
+	// 		// scplayer = player;
+	// 		document.getElementById('player-button').onclick = function(){
+	// 			if (!obj.play) {
+	// 				_play();
+	// 			}else{
+	// 				_pause();
+	// 			}
+
+	// 			if (autostart) {
+	// 				autostart = false;
+	// 				_play();
+	// 			}
+				
+	// 		}
+
+	// 		document.getElementById('next').onclick = function(){
+	// 			_pause();
+	// 			set_track_count('next');
+	// 			play();
+	// 		}
+
+	// 		document.getElementById('before').onclick = function(){
+	// 			_pause();
+	// 			play(select_track_id('before'));
+	// 		}
+
+
+	// 		function _play(){
+	// 			alert('play');
+	// 			obj.play = true;
+	// 			set_track_id_color(track_list[obj.track_count]);
+	// 			// console.log(obj.track_id);
+	// 			// console.log(track_list[obj.track_count]);
+				
+	// 			// track_id = track_list[obj.track_count];
+	//    //  		if (obj.track_id !== track_id) obj.track_count++;
+
+	//    //  		if (obj.track_count >= track_list.length) {
+	//    //  			obj.track_count = 0;
+	//    //  		}
+
+	//     		player.play();
+	//     		// obj.track_id = track_id;
+	//     		document.getElementById('status').innerHTML = obj.track_count;
+	    		
+	//     	}
+
+	//     	function _pause(){
+	//     		alert('pause');
+	//     		obj.play = false;
+	//     		player.pause();
+	//     		console.log(player);
+	//     	}
+
+	//     	player.on('play-start', function(){
+	// 			$.getJSON('https://api.soundcloud.com/tracks/'+obj.track_id+'?client_id=N2eHz8D7GtXSl6fTtcGHdSJiS74xqOUI', function(e){
+	// 				document.getElementById('total_time').innerHTML = timecode(e.duration);
+	// 			})
+	// 		});
+
+	//     	player.on('time', function(e){
+	// 			document.getElementById('time').innerHTML = timecode(e);
+	// 		});
+
+	// 		player.on('finish', function(){
+	// 			play(track_list[obj.track_count]);
+	// 		});
+	//     })	
+	// }
+
+
+	
+}
+
+document.getElementById('next').onclick = function(){
+	scplayer.kill();
+	obj.play = false;
+	autostart = true;
+	set_track_count('next');
+	play();
+}
+
+document.getElementById('before').onclick = function(){
+	scplayer.kill();
+	obj.play = false;
+	autostart = true;
+	set_track_count('before');
+	play();
+}
+
+
+
+function play(){
+	SC.stream('/tracks/'+track_list[obj.track_count]).then(function(player){
+		scplayer = player;
+		
+		document.getElementById('player-button').onclick = function(){
+			if (!obj.play) {
+				_play();
+			}else{
+				_pause();
+			}	
+		}
+
+		if (autostart) {
+			autostart = false;
+			_play();
+		}
+
+
+		function _play(){
+			obj.play = true;
+			set_track_id_color(track_list[obj.track_count]);
+			// console.log(obj.track_id);
+			// console.log(track_list[obj.track_count]);
+			
+			// track_id = track_list[obj.track_count];
+   //  		if (obj.track_id !== track_id) obj.track_count++;
+
+   //  		if (obj.track_count >= track_list.length) {
+   //  			obj.track_count = 0;
+   //  		}
+
+    		player.play();
+    		// obj.track_id = track_id;
+    		document.getElementById('status').innerHTML = obj.track_count;
+    		
+    	}
+
+    	function _pause(){
+    		obj.play = false;
+    		player.pause();
+    		console.log(player);
+    	}
+
+    	player.on('play-start', function(){
+			// $.getJSON('https://api.soundcloud.com/tracks/'+obj.track_id+'?client_id=N2eHz8D7GtXSl6fTtcGHdSJiS74xqOUI', function(e){
+			// 	document.getElementById('total_time').innerHTML = timecode(e.duration);
+			// })
+		});
+
+
+    	player.on('time', function(e){
+			document.getElementById('time').innerHTML = timecode(e);
+			document.getElementById('seek').value = e;
+
+		});
+
+		player.on('buffering_start', function(){
+			document.getElementById('loading').style.display = 'block';
+		});
+
+		player.on('buffering_end', function(){
+			document.getElementById('loading').style.display = 'none';
+			document.getElementById('total_time').innerHTML = timecode(this.getDuration());
+			document.getElementById('seek').max = this.getDuration();
+		});
+
+		player.on('play-resume', function(){
+			
+		});
+		
+
+		player.on('finish', function(){
+			set_track_count('next');
+			autostart = true;
+			play();
+		});
+
+		document.getElementById('seek').onchange = function(){
+			player.seek(this.value);
+			// alert(this.value);
+		}
+    })
+}
+
+// function play(track_id){
+// 	SC.stream('/tracks/'+track_id).then(function(player){
+// 		_play();
+//     	function _play(){
+//     		obj.play = true;
+//     		if (obj.track_id !== track_id) obj.track_count++;
+
+//     		if (obj.track_count >= track_list.length) {
+//     			obj.track_count = 0;
+//     		}
+
+//     		player.play();
+//     		obj.track_id = track_id;
+//     		document.getElementById('status').innerHTML = obj.track_count;
+//     		set_track_id_color(obj.track_id);
+//     		// new Notification("play : "+obj.track_id);
+//     	}
+
+//     	function _pause(){
+//     		obj.play = false;
+//     		player.pause();
+//     	}
+
+//     	document.getElementsByClassName('test123')[0].onclick = function(){
+// 			if (!obj.play) {
+// 				_play();
+// 			}else{
+// 				_pause();
+// 			}
+// 		}
+
+// 		document.getElementById('next').onclick = function(){
+// 			_pause();
+// 			play(select_track_id('next'));
+// 		}
+
+// 		document.getElementById('before').onclick = function(){
+// 			_pause();
+// 			play(select_track_id('before'));
+// 		}
+
+// 		player.on('play-start', function(){
+// 			$.getJSON('https://api.soundcloud.com/tracks/'+obj.track_id+'?client_id=N2eHz8D7GtXSl6fTtcGHdSJiS74xqOUI', function(e){
+// 				document.getElementById('total_time').innerHTML = timecode(e.duration);
+// 			})
+// 		});
+
+//     	player.on('time', function(e){
+// 			document.getElementById('time').innerHTML = timecode(e);
+// 		});
+
+// 		player.on('finish', function(){
+// 			play(track_list[obj.track_count]);
+// 		});
+//     })
+// }
+
+var timecode = function(ms) {
+var hms = function(ms) {
+      return {
+        h: Math.floor(ms/(60*60*1000)),
+        m: Math.floor((ms/60000) % 60),
+        s: Math.floor((ms/1000) % 60)
+      };
+    }(ms),
+    tc = []; // Timecode array to be joined with '.'
+	if (hms.h > 0) {
+	  tc.push(hms.h);
+	}
+
+	tc.push((hms.m < 10 && hms.h > 0 ? "0" + hms.m : hms.m));
+	tc.push((hms.s < 10  ? "0" + hms.s : hms.s));
+
+	return tc.join(':');
+};
+
+function select_track_id(type){
+	var this_track_num = track_list.indexOf(obj.track_id);
+	if (type == 'next') {
+		if (this_track_num >= track_list.length-1) {
+			return track_list[0];
+		}else{
+			return track_list[this_track_num+1];
+		}
+	}else if(type == 'before'){
+		if (this_track_num == -1) {
+			return track_list[0];
+		}else{
+			if (this_track_num == 0) {
+				return track_list[track_list.length-1];
+			}else{
+				return track_list[this_track_num-1];
+			}	
+		}
+	}
+}
+
+function set_track_id_color(track_id){
+	var list = document.getElementsByClassName('track-view-list');
+	for (var i = 0; i <= list.length-1; i++) {
+		document.getElementById(list[i].id).style.color = 'black';
+	}
+	document.getElementById(track_id).style.color = 'red';
+}
+
+(function () {
+	var list = '';
+	for (var i = 0; i <= track_list.length-1; i++) {
+		list += '<div class="track-view-list" id="'+track_list[i]+'">'+track_list[i]+'</div>';
+	}
+	document.getElementById('list-view').innerHTML=list;
+})()
+// (function () {
+//     SC.stream('/tracks/'+track_id).then(function(player){
+//     	document.getElementsByClassName('test123')[0].onclick = function(){
+//     		if (!obj.play) {
+//     			_play();
+//     		}else{
+//     			_pause();
+//     		}
+//     	}
+
+//     	function _play(){
+//     		obj.play = true;
+//     		player.play();
+//     	}
+
+//     	function _pause(){
+//     		obj.play = false;
+//     		player.pause();
+//     	}
+
+//     	player.on('time', function(e){
+// 			document.getElementById('time').innerHTML = e/1000;
+// 		})
+
+// 		player.on('play', function(){
+// 			document.getElementById('status').innerHTML = 'play';
+// 		});
+
+// 		player.on('pause', function(){
+// 			document.getElementById('status').innerHTML = 'pause';
+// 		})
+// 		player.on('state-change', function(e){
+// 			console.log(e);
+// 		})
+//     })
+// })();
+
+// document.getElementsByClassName('test123')[0].onclick = function(){
+// 	play(track_id);
+// }
+
+
+
+/*
+function play(track_id){
+	SC.stream('/tracks/'+track_id).then(function(player){	
+		player.on('finish', function(){
+			console.log('finish');
+		});
+
+		player.on('play', function(e){
+			console.log('start');
+		})
+
+		player.on('time', function(e){
+			document.getElementById('time').innerHTML = e/1000;
+			// console.log('t: '+e);
+		})
+
+		player.on('pause', function(){
+			console.log('pause');
+		})
+
+		function _play(){
+			obj.play = true;
+			player.play();
+		}
+
+		function _pause(){
+			obj.play = false;
+			player.pause();
+		}
+
+		document.getElementsByClassName('test123')[0].onclick = function(){
+			if (obj.play) {
+				_pause();
+			}else{
+				_play();
+			}
+		}
+
+		if (!obj.play) {
+			_play();
+		}
+	});
+}
+
+function stop(track_id){
+	SC.stream('/tracks/'+track_id).then(function(player){	
+		player.pause();
+	});	
+}
+*/
+
+
+
+
+// SC.get('/tracks', {
+//  	genres: 'punk', bpm: { from: 120 }
+// }).then(function(tracks) {
+//  	console.log(tracks);
+// });
+
+
+function notifyMe() {
+  // Let's check if the browser supports notifications
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notification");
+  }
+
+  // Let's check whether notification permissions have already been granted
+  else if (Notification.permission === "granted") {
+    // If it's okay let's create a notification
+    var notification = new Notification("Hi there!");
+  }
+
+  // Otherwise, we need to ask the user for permission
+  else if (Notification.permission !== 'denied') {
+    Notification.requestPermission(function (permission) {
+      // If the user accepts, let's create a notification
+      if (permission === "granted") {
+        var notification = new Notification("Hi there!");
+      }
+    });
+  }
+
+  // At last, if the user has denied notifications, and you 
+  // want to be respectful there is no need to bother them any more.
+}
+</script>
+</body>
+</html>
