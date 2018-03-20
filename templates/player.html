@@ -19,7 +19,9 @@
 	</div>
 	<div id="status"></div>
 	<div id="list-view" style="margin-top: 10px;"></div>
-	<input type="range" id="seek" name="" min="0" max="0" style="width: 500px;">
+	<!-- <input type="range" id="seek" name="" min="0" max="0" style="width: 500px;"> -->
+
+	<canvas></canvas>
 <script>
 SC.initialize({
  	// client_id: '7c76b10fd87a3f9cf91d51b9f8cf069c'
@@ -38,18 +40,6 @@ var obj = {
 	'track_count' : 0,
 	'track_id' : undefined
 };
-
-// document.getElementsByClassName('test123')[0].onclick = function(){
-// 	if (!obj.play) {
-// 		play(track_list[obj.track_count]);
-// 	}
-// }
-
-// function play2(){
-// 	SC.stream('/tracks/181882050').then(function(player){
-// 		player.play();
-// 	})
-// }
 
 function set_track_count(type){
 	switch(type){
@@ -75,99 +65,7 @@ var autostart = false;
 
 window.onload = function(){
 	play();
-	// function play(){
-	// 	SC.stream('/tracks/'+track_list[obj.track_count]).then(function(player){
-	// 		// scplayer = player;
-	// 		document.getElementById('player-button').onclick = function(){
-	// 			if (!obj.play) {
-	// 				_play();
-	// 			}else{
-	// 				_pause();
-	// 			}
-
-	// 			if (autostart) {
-	// 				autostart = false;
-	// 				_play();
-	// 			}
-				
-	// 		}
-
-	// 		document.getElementById('next').onclick = function(){
-	// 			_pause();
-	// 			set_track_count('next');
-	// 			play();
-	// 		}
-
-	// 		document.getElementById('before').onclick = function(){
-	// 			_pause();
-	// 			play(select_track_id('before'));
-	// 		}
-
-
-	// 		function _play(){
-	// 			alert('play');
-	// 			obj.play = true;
-	// 			set_track_id_color(track_list[obj.track_count]);
-	// 			// console.log(obj.track_id);
-	// 			// console.log(track_list[obj.track_count]);
-				
-	// 			// track_id = track_list[obj.track_count];
-	//    //  		if (obj.track_id !== track_id) obj.track_count++;
-
-	//    //  		if (obj.track_count >= track_list.length) {
-	//    //  			obj.track_count = 0;
-	//    //  		}
-
-	//     		player.play();
-	//     		// obj.track_id = track_id;
-	//     		document.getElementById('status').innerHTML = obj.track_count;
-	    		
-	//     	}
-
-	//     	function _pause(){
-	//     		alert('pause');
-	//     		obj.play = false;
-	//     		player.pause();
-	//     		console.log(player);
-	//     	}
-
-	//     	player.on('play-start', function(){
-	// 			$.getJSON('https://api.soundcloud.com/tracks/'+obj.track_id+'?client_id=N2eHz8D7GtXSl6fTtcGHdSJiS74xqOUI', function(e){
-	// 				document.getElementById('total_time').innerHTML = timecode(e.duration);
-	// 			})
-	// 		});
-
-	//     	player.on('time', function(e){
-	// 			document.getElementById('time').innerHTML = timecode(e);
-	// 		});
-
-	// 		player.on('finish', function(){
-	// 			play(track_list[obj.track_count]);
-	// 		});
-	//     })	
-	// }
-
-
-	
 }
-
-document.getElementById('next').onclick = function(){
-	scplayer.kill();
-	obj.play = false;
-	autostart = true;
-	set_track_count('next');
-	play();
-}
-
-document.getElementById('before').onclick = function(){
-	scplayer.kill();
-	obj.play = false;
-	autostart = true;
-	set_track_count('before');
-	play();
-}
-
-
 
 function play(){
 	SC.stream('/tracks/'+track_list[obj.track_count]).then(function(player){
@@ -190,18 +88,8 @@ function play(){
 		function _play(){
 			obj.play = true;
 			set_track_id_color(track_list[obj.track_count]);
-			// console.log(obj.track_id);
-			// console.log(track_list[obj.track_count]);
-			
-			// track_id = track_list[obj.track_count];
-   //  		if (obj.track_id !== track_id) obj.track_count++;
-
-   //  		if (obj.track_count >= track_list.length) {
-   //  			obj.track_count = 0;
-   //  		}
 
     		player.play();
-    		// obj.track_id = track_id;
     		document.getElementById('status').innerHTML = obj.track_count;
     		
     	}
@@ -221,7 +109,7 @@ function play(){
 
     	player.on('time', function(e){
 			document.getElementById('time').innerHTML = timecode(e);
-			document.getElementById('seek').value = e;
+			// document.getElementById('seek').value = e;
 
 		});
 
@@ -232,7 +120,7 @@ function play(){
 		player.on('buffering_end', function(){
 			document.getElementById('loading').style.display = 'none';
 			document.getElementById('total_time').innerHTML = timecode(this.getDuration());
-			document.getElementById('seek').max = this.getDuration();
+			// document.getElementById('seek').max = this.getDuration();
 		});
 
 		player.on('play-resume', function(){
@@ -241,74 +129,43 @@ function play(){
 		
 
 		player.on('finish', function(){
+			player.kill();
+			while(true){
+				if (scplayer.isDead()) {
+					alert('end');
+					break;
+				}	
+			}
 			set_track_count('next');
 			autostart = true;
 			play();
 		});
 
-		document.getElementById('seek').onchange = function(){
-			player.seek(this.value);
-			// alert(this.value);
+		// document.getElementById('seek').onchange = function(){
+		// 	player.seek(this.value);
+		// 	// alert(this.value);
+		// }
+
+		document.getElementById('next').onclick = function(){
+			player.kill();
+			while(true){
+				if (player.isDead()) break;
+			}
+			obj.play = false;
+			autostart = true;
+			set_track_count('next');
+			play();
+		}
+
+		document.getElementById('before').onclick = function(){
+			player.kill();
+			obj.play = false;
+			autostart = true;
+			set_track_count('before');
+			play();
 		}
     })
 }
-
-// function play(track_id){
-// 	SC.stream('/tracks/'+track_id).then(function(player){
-// 		_play();
-//     	function _play(){
-//     		obj.play = true;
-//     		if (obj.track_id !== track_id) obj.track_count++;
-
-//     		if (obj.track_count >= track_list.length) {
-//     			obj.track_count = 0;
-//     		}
-
-//     		player.play();
-//     		obj.track_id = track_id;
-//     		document.getElementById('status').innerHTML = obj.track_count;
-//     		set_track_id_color(obj.track_id);
-//     		// new Notification("play : "+obj.track_id);
-//     	}
-
-//     	function _pause(){
-//     		obj.play = false;
-//     		player.pause();
-//     	}
-
-//     	document.getElementsByClassName('test123')[0].onclick = function(){
-// 			if (!obj.play) {
-// 				_play();
-// 			}else{
-// 				_pause();
-// 			}
-// 		}
-
-// 		document.getElementById('next').onclick = function(){
-// 			_pause();
-// 			play(select_track_id('next'));
-// 		}
-
-// 		document.getElementById('before').onclick = function(){
-// 			_pause();
-// 			play(select_track_id('before'));
-// 		}
-
-// 		player.on('play-start', function(){
-// 			$.getJSON('https://api.soundcloud.com/tracks/'+obj.track_id+'?client_id=N2eHz8D7GtXSl6fTtcGHdSJiS74xqOUI', function(e){
-// 				document.getElementById('total_time').innerHTML = timecode(e.duration);
-// 			})
-// 		});
-
-//     	player.on('time', function(e){
-// 			document.getElementById('time').innerHTML = timecode(e);
-// 		});
-
-// 		player.on('finish', function(){
-// 			play(track_list[obj.track_count]);
-// 		});
-//     })
-// }
 
 var timecode = function(ms) {
 var hms = function(ms) {
@@ -365,108 +222,6 @@ function set_track_id_color(track_id){
 	}
 	document.getElementById('list-view').innerHTML=list;
 })()
-// (function () {
-//     SC.stream('/tracks/'+track_id).then(function(player){
-//     	document.getElementsByClassName('test123')[0].onclick = function(){
-//     		if (!obj.play) {
-//     			_play();
-//     		}else{
-//     			_pause();
-//     		}
-//     	}
-
-//     	function _play(){
-//     		obj.play = true;
-//     		player.play();
-//     	}
-
-//     	function _pause(){
-//     		obj.play = false;
-//     		player.pause();
-//     	}
-
-//     	player.on('time', function(e){
-// 			document.getElementById('time').innerHTML = e/1000;
-// 		})
-
-// 		player.on('play', function(){
-// 			document.getElementById('status').innerHTML = 'play';
-// 		});
-
-// 		player.on('pause', function(){
-// 			document.getElementById('status').innerHTML = 'pause';
-// 		})
-// 		player.on('state-change', function(e){
-// 			console.log(e);
-// 		})
-//     })
-// })();
-
-// document.getElementsByClassName('test123')[0].onclick = function(){
-// 	play(track_id);
-// }
-
-
-
-/*
-function play(track_id){
-	SC.stream('/tracks/'+track_id).then(function(player){	
-		player.on('finish', function(){
-			console.log('finish');
-		});
-
-		player.on('play', function(e){
-			console.log('start');
-		})
-
-		player.on('time', function(e){
-			document.getElementById('time').innerHTML = e/1000;
-			// console.log('t: '+e);
-		})
-
-		player.on('pause', function(){
-			console.log('pause');
-		})
-
-		function _play(){
-			obj.play = true;
-			player.play();
-		}
-
-		function _pause(){
-			obj.play = false;
-			player.pause();
-		}
-
-		document.getElementsByClassName('test123')[0].onclick = function(){
-			if (obj.play) {
-				_pause();
-			}else{
-				_play();
-			}
-		}
-
-		if (!obj.play) {
-			_play();
-		}
-	});
-}
-
-function stop(track_id){
-	SC.stream('/tracks/'+track_id).then(function(player){	
-		player.pause();
-	});	
-}
-*/
-
-
-
-
-// SC.get('/tracks', {
-//  	genres: 'punk', bpm: { from: 120 }
-// }).then(function(tracks) {
-//  	console.log(tracks);
-// });
 
 
 function notifyMe() {

@@ -48,6 +48,7 @@ class TrackViewSet(viewsets.ModelViewSet):
 		self.image_url = sc_data.get('artwork_url', '')
 		self.download_url = sc_data.get('download_url', '')
 		self.waveform_url = sc_data.get('waveform_url', '')
+		self.duration = sc_data.get('duration', '')
 
 		serializer = self.get_serializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
@@ -69,11 +70,16 @@ class TrackViewSet(viewsets.ModelViewSet):
 
 
 	def update(self, request, *args, **kwargs):
-		post_id = request.data['id']
-		if kwargs['track_id'] != post_id:
-			return Response({'message' : 'ID는 변경할 수 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)	
+		post_id = request.data.get('track_id', '')
+		if post_id and kwargs['track_id'] != post_id:
+			return Response({'message' : 'Track ID는 변경할 수 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)	
+
+		sc_data = requests.get('http://api.soundcloud.com/tracks/'+str(kwargs['track_id'])+'?client_id='+settings.SOCIAL_AUTH_SOUNDCLOUD_KEY).json()
 
 		instance = self.get_object()
+		instance.duration = sc_data.get('duration', 0)
+		instance.save()
+		
 		serializer = self.get_serializer(instance, data=request.data)
 		serializer.is_valid(raise_exception=True)
 		self.perform_update(serializer)

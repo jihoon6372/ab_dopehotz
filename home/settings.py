@@ -17,14 +17,14 @@ import json
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 
-import uwsgi
-from uwsgidecorators import timer
-from django.utils import autoreload
+# import uwsgi
+# from uwsgidecorators import timer
+# from django.utils import autoreload
 
-@timer(3)
-def change_code_gracefull_reload(sig):
-    if autoreload.code_changed():
-        uwsgi.reload()
+# @timer(3)
+# def change_code_gracefull_reload(sig):
+#     if autoreload.code_changed():
+#         uwsgi.reload()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -156,7 +156,19 @@ CORS_ORIGIN_WHITELIST = (
     'angular.dopehotz.com'
 )
 
-# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ALLOW_HEADERS = (
+#     'accept',
+#     'accept-encoding',
+#     'authorization',
+#     'content-type',
+#     'dnt',
+#     'origin',
+#     'user-agent',
+#     'x-csrftoken',
+#     'x-requested-with',
+# )
 
 TEMPLATES = [
     {

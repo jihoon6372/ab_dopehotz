@@ -12,7 +12,7 @@ class TacksAdmin(admin.ModelAdmin):
         ('집계', {'fields': ('view_count', 'comments', 'likes', 'clips', 'track_score', 'on_stage')})
     )
 
-	readonly_fields = ('track_id', 'view_count', 'comments','clips', 'likes', 'image_url', 'download_url', 'waveform_url', 'genre')
+	# readonly_fields = ('track_id', 'view_count', 'comments','clips', 'likes', 'image_url', 'download_url', 'waveform_url', 'genre')
 	prepopulated_fields = {'slug': ('title',)}
 	list_per_page = 10
 

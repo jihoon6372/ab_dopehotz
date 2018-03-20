@@ -29,8 +29,9 @@ class Track(models.Model):
 	track_score = models.IntegerField(default=0, verbose_name='트랙 점수')
 	on_stage = models.IntegerField(default=0, db_index=True, verbose_name='온스테이지')
 	is_deleted = models.BooleanField(default=False, verbose_name='삭제여부', help_text='트랙을 삭제하는 대신 이부분을 체크 하세요.')
-	create_date = models.DateTimeField(auto_created=True)
+	create_date = models.DateTimeField(auto_now_add=True)
 	update_date = models.DateTimeField(auto_now=True)
+	duration = models.IntegerField(default=0, verbose_name='곡 길이')
 
 	objects = TrackManager()
 

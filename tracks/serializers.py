@@ -116,6 +116,7 @@ class TrackSerializer(serializers.ModelSerializer):
 
 	# comment = serializers.SerializerMethodField()
 	comment_count = serializers.SerializerMethodField()
+	# test_duration = 1000
 
 	class Meta:
 		model = Track
@@ -125,6 +126,8 @@ class TrackSerializer(serializers.ModelSerializer):
 			'title',
 			'slug',
 			'tape_info',
+			'duration',
+			# 'test_duration',
 			'lyrics',
 			'hashtag',
 			'genre',
