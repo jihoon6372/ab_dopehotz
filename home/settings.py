@@ -96,6 +96,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'tracks.apps.TracksConfig',
     'articles.apps.ArticlesConfig',
+    'playlists.apps.PlaylistsConfig',
 
     #third party
     'debug_toolbar',
