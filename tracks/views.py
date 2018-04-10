@@ -37,8 +37,8 @@ class TrackViewSet(viewsets.ModelViewSet):
 		user_social = user_info.social_auth.all().first()
 
 		# 사운드클라우드 계정이 등록 안 되어있을 경우
-		if not user_social:
-			return Response({'message' : '사운드클라우드의 계정이 등록되어 있지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+		# if not user_social:
+		# 	return Response({'message' : '사운드클라우드의 계정이 등록되어 있지 않습니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
 		# 본인의 게시물인지 체크
 		# if user_social.uid != sc_data['user']['id']:

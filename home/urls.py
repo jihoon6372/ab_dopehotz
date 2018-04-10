@@ -31,6 +31,7 @@ urlpatterns = [
     path('', include('social_django.urls', namespace='social')),
     path('callback/', callback_comp),
     path('player/', player),
+    path('playlist/', include('playlists.urls', namespace='playlisy')),
 ]
 
 
