@@ -10,7 +10,7 @@ app_name = 'playlist'
 
 urlpatterns = [
     # path('', test_view),
-    path('', PlayListViewSet.as_view({'get':'list'})),
+    path('', PlayListViewSet.as_view({'get':'list', 'post':'create'})),
 	# path('', TrackViewSet.as_view({'get':'list', 'post':'create'})),
 	# path('<int:track_id>/', TrackViewSet.as_view({'get':'retrieve', 'put':'update', 'delete':'destroy'})),
     # path('on-stage/', OnStageViewSet.as_view({'get':'list'})),

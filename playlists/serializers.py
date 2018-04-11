@@ -20,7 +20,7 @@ class PersonSerializer(serializers.ModelSerializer):
 		)
 
 class PlayListSerializer(serializers.ModelSerializer):
-    track = TrackSerializer()
+    track = TrackSerializer(read_only=True)
 
     class Meta:
         model = PlayList
