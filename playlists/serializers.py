@@ -5,7 +5,7 @@ from rest_framework import serializers
 from social_django.models import UserSocialAuth
 from rest_framework.validators import UniqueTogetherValidator
 
-from track.serializers import TrackSerializer
+from tracks.serializers import TrackSerializer
 # from rest_framework.decorators import detail_route
 
 class PersonSerializer(serializers.ModelSerializer):
