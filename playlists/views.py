@@ -25,4 +25,4 @@ class PlayListViewSet(viewsets.ModelViewSet):
 		return Response(serializer.data)
 
 	def get_queryset(self):
-		return PlayList.objects.filter(user=self.request.user)
+		return PlayList.objects.filter(user=self.request.user).order_by('order')
