@@ -41,5 +41,3 @@ class PlayListViewSet(viewsets.ModelViewSet):
 			order = order,
 			create_date=datetime.datetime.now()
 		)
-
-		

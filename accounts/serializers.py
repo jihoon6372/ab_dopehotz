@@ -6,7 +6,7 @@ from social_django.models import UserSocialAuth
 class TrackSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Track
-		fields = ('title', 'tape_info', 'track_id')
+		fields = ('title', 'tape_info', 'track_id', 'image_url')
 
 
 class SocialSerializer(serializers.ModelSerializer):

@@ -29,6 +29,7 @@ class PersonSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
 		fields = (
+			'id',
 			'email',
 			'username',
 			'soundcloud_url',
