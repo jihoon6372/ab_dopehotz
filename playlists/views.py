@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import permissions
+from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from rest_framework.response import Response
 from django.shortcuts import render
@@ -22,6 +23,7 @@ def test_view(request):
 class PlayListViewSet(viewsets.ModelViewSet):
 	serializer_class = PlayListSerializer
 	permission_classes = (permissions.IsAuthenticated,)
+	renderer_classes = (JSONRenderer, )
 
 	def get_queryset(self):
 		return PlayList.objects.filter(user=self.request.user).order_by('order')

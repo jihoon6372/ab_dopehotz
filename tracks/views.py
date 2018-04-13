@@ -20,7 +20,7 @@ class TrackViewSet(viewsets.ModelViewSet):
 	queryset = Track.objects.prefetch_related('comment').select_related('user').filter(is_deleted=False)
 	serializer_class = TrackSerializer
 	permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
-	# renderer_classes = (JSONRenderer, )
+	renderer_classes = (JSONRenderer, )
 
 
 	def create(self, request, *args, **kwargs):
@@ -97,12 +97,14 @@ class TrackViewSet(viewsets.ModelViewSet):
 class OnStageViewSet(viewsets.ReadOnlyModelViewSet):
 	queryset = Track.objects.filter(on_stage=1)
 	serializer_class = TrackSerializer
+	renderer_classes = (JSONRenderer, )
 
 
 
 class TrackCommentList(viewsets.ModelViewSet):
 	serializer_class = TrackCommentSerializer
 	permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+	renderer_classes = (JSONRenderer, )
 
 	def get_queryset(self):
 		track = Track.objects.select_related('user').filter(track_id=self.kwargs['track'], is_deleted=False).first()
@@ -121,6 +123,7 @@ class TrackCommentList(viewsets.ModelViewSet):
 class TrackCommentDetail(viewsets.ModelViewSet):
 	serializer_class = TrackCommentDetailSerializer
 	permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+	renderer_classes = (JSONRenderer, )
 
 	def get_queryset(self):
 		return TrackComment.objects.filter(pk=self.kwargs['pk'], is_deleted=False)
