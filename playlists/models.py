@@ -9,3 +9,6 @@ class PlayList(models.Model):
     track = models.ForeignKey(Track, verbose_name="곡정보", null=True, on_delete=models.CASCADE, related_name='playlist')
     order = models.IntegerField(default=0, verbose_name='플레이리스트 순서')
     create_date = models.DateTimeField(auto_created=True, auto_now=True)
+
+    # class Meta:
+    #     unique_together = (("user", "order"),)
