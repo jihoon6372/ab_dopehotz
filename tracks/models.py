@@ -17,7 +17,7 @@ class Track(models.Model):
 	user = models.ForeignKey(User, verbose_name="작성자", null=True, on_delete=models.CASCADE, related_name='tracks')
 	tape_info = models.TextField(blank=True, null=True, verbose_name='Tape INFO')
 	lyrics = models.TextField(blank=True, null=True, verbose_name='lyrics')
-	hashtag = models.CharField(max_length=255, blank=True, null=True, verbose_name='해시태그')
+	hashtag = models.TextField(blank=True, null=True, verbose_name='해시태그')
 	genre = models.CharField(max_length=255, blank=True, null=True, verbose_name='장르')
 	image_url = models.CharField(max_length=255, blank=True, null=True, verbose_name='이미지 URL')
 	download_url = models.CharField(max_length=255, blank=True, null=True, verbose_name='다운로드 URL')
@@ -124,3 +124,24 @@ class TrackComment(models.Model):
 
 	def __str__(self):
 		return self.contents
+
+
+class TrackLikeType(models.Model):
+	like_type = models.CharField(max_length=255, verbose_name='좋아요 타입')
+
+	class Meta:
+		verbose_name_plural = '트랙 좋아요 타입'
+
+	def __str__(self):
+		return self.like_type
+
+
+class TrackLikeLog(models.Model):
+	track_like_type = models.ForeignKey(TrackLikeType, verbose_name="좋아요 타입", on_delete=models.CASCADE)
+	track = models.ForeignKey(Track, blank=True, null=True, verbose_name="트랙", on_delete=models.CASCADE, related_name='TrackLog')
+	user = models.ForeignKey(User, verbose_name="작성자", on_delete=models.CASCADE)
+	create_date = models.DateTimeField(auto_created=True)
+
+	class Meta:
+		verbose_name_plural = '트랙 좋아요 로그'
+		ordering = ['-create_date']

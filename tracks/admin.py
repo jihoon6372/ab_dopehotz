@@ -55,8 +55,18 @@ class TrackCommentAdmin(admin.ModelAdmin):
 	list_display = ('contents', 'track', 'parent', 'user', 'is_deleted', 'create_date')
 	list_filter = ('is_deleted',)
 	list_per_page = 10
-		
+	
+class TrackLikeTypeAdmin(admin.ModelAdmin):
+	list_display = ('like_type',)
+	list_per_page = 10
+
+class TrackLikeLogAdmin(admin.ModelAdmin):
+	list_display = ('track_like_type', 'track', 'user', 'create_date')
+	list_per_page = 10
+
 
 admin.site.register(Track, TacksAdmin)
 # admin.site.register(DeleteTrack, DeleteTrackAdmin)
 admin.site.register(TrackComment, TrackCommentAdmin)
+admin.site.register(TrackLikeType, TrackLikeTypeAdmin)
+admin.site.register(TrackLikeLog, TrackLikeLogAdmin)

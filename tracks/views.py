@@ -144,3 +144,7 @@ def _get_unique_slug(title):
 		num += 1
 
 	return unique_slug
+
+
+class TrackLike(viewsets.ModelViewSet):
+	pass
