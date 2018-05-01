@@ -3,6 +3,7 @@ from tracks.models import Track, TrackComment
 from rest_framework import serializers
 from social_django.models import UserSocialAuth
 from rest_framework.validators import UniqueTogetherValidator
+from home.serializers import DateTimeFieldWihTZ
 # from rest_framework.decorators import detail_route
 
 class SocialSerializer(serializers.ModelSerializer):
@@ -39,7 +40,9 @@ class PersonSerializer(serializers.ModelSerializer):
 
 class SubTrackCommentSerializer(serializers.ModelSerializer):
 	user = PersonSerializer(read_only=True)
+	#create_date = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
 	# replies = serializers.SerializerMethodField()
+	create_date = DateTimeFieldWihTZ(format='%Y-%m-%d %H:%M:%S')
 
 	class Meta:
 		model = TrackComment
@@ -53,6 +56,8 @@ class SubTrackCommentSerializer(serializers.ModelSerializer):
 			# 'replies',
 		)
 
+	
+
 	# def get_replies(self, obj):
 	# 	if obj.children:
 	# 		return SubTrackCommentSerializer(obj.children, many=True).data
@@ -62,6 +67,7 @@ class TrackCommentSerializer(serializers.ModelSerializer):
 	user = PersonSerializer(read_only=True)
 	# reply_count = serializers.SerializerMethodField()
 	replies = serializers.SerializerMethodField(read_only=True)
+	create_date = DateTimeFieldWihTZ(format='%Y-%m-%d %H:%M:%S')
 
 	class Meta:
 		model = TrackComment
@@ -91,6 +97,8 @@ class TrackCommentSerializer(serializers.ModelSerializer):
 
 class TrackCommentDetailSerializer(serializers.ModelSerializer):
 	user = PersonSerializer(read_only=True)
+	create_date = DateTimeFieldWihTZ(format='%Y-%m-%d %H:%M:%S')
+
 	class Meta:
 		model = TrackComment
 		fields = (
@@ -106,6 +114,7 @@ class TrackCommentDetailSerializer(serializers.ModelSerializer):
 
 class TrackSerializer(serializers.ModelSerializer):
 	user = PersonSerializer(read_only=True)
+	create_date = DateTimeFieldWihTZ(format='%Y-%m-%d %H:%M:%S')
 	
 	def get_comment_count(self, obj):
 		return obj.comment.count()
@@ -113,11 +122,13 @@ class TrackSerializer(serializers.ModelSerializer):
 	# def get_comment(self, obj):
 	# 	c_qs = TrackComment.objects.filter_by_instance(obj)
 	# 	comments = TrackCommentSerializer(c_qs, many=True).data
+	# 	print()
+	# 	print('tte')
+	# 	print(comments)
 	# 	return comments
 
-	# comment = serializers.SerializerMethodField()
 	comment_count = serializers.SerializerMethodField()
-	# test_duration = 1000
+	# comment = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Track
@@ -128,7 +139,6 @@ class TrackSerializer(serializers.ModelSerializer):
 			'slug',
 			'tape_info',
 			'duration',
-			# 'test_duration',
 			'lyrics',
 			'hashtag',
 			'genre',
@@ -142,7 +152,7 @@ class TrackSerializer(serializers.ModelSerializer):
 			'on_stage',
 			'comment_count',
 			# 'comment',
-			'create_date'
+			'create_date',
 		)
 		read_only_fields = (
 			'user',
@@ -156,5 +166,6 @@ class TrackSerializer(serializers.ModelSerializer):
 			'genre',
 			'image_url',
 			'download_url',
-			'waveform_url'
+			'waveform_url',
+			'test_date_time'
 		)
