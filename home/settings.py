@@ -296,7 +296,7 @@ REST_FRAMEWORK = {
         # 'home.authentication.ExpiringTokenAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 15
+    'PAGE_SIZE': 20
 }
 REST_FRAMEWORK_TOKEN_EXPIRE_HOURS = 24
 
