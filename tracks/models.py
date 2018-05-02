@@ -102,7 +102,7 @@ class TrackCommentManager(models.Manager):
 		return qs
 
 	def filter_by_instance(self, instance):
-		qs = super(TrackCommentManager, self).select_related('user').select_related('parent').filter(pk=instance.id, parent=None, is_deleted=False)
+		qs = super(TrackCommentManager, self).select_related('user').select_related('parent').filter(track=instance.id, parent=None, is_deleted=False)
 		return qs
 
 
