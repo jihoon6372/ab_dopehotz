@@ -7,8 +7,8 @@ class LogTypeAdmin(admin.ModelAdmin):
     
 
 class PlayListLogAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('user', 'track', 'order', 'log', 'create_date')
 
-# class PlayList
+
 admin.site.register(LogType, LogTypeAdmin)
 admin.site.register(PlayListLog, PlayListLogAdmin)
