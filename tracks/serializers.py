@@ -119,16 +119,13 @@ class TrackSerializer(serializers.ModelSerializer):
 	def get_comment_count(self, obj):
 		return obj.comment.count()
 
-	# def get_comment(self, obj):
-	# 	c_qs = TrackComment.objects.filter_by_instance(obj)
-	# 	comments = TrackCommentSerializer(c_qs, many=True).data
-	# 	print()
-	# 	print('tte')
-	# 	print(comments)
-	# 	return comments
+	def get_comment(self, obj):
+		c_qs = TrackComment.objects.filter_by_instance(obj)
+		comments = TrackCommentSerializer(c_qs, many=True).data
+		return comments
 
 	comment_count = serializers.SerializerMethodField()
-	# comment = serializers.SerializerMethodField()
+	comment = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Track
@@ -151,7 +148,7 @@ class TrackSerializer(serializers.ModelSerializer):
 			'track_score',
 			'on_stage',
 			'comment_count',
-			# 'comment',
+			'comment',
 			'create_date',
 		)
 		read_only_fields = (
