@@ -5,11 +5,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.utils.text import slugify
 from django.conf import settings
+
 import datetime
 
 from .permissions import IsOwnerOrReadOnly
 from .serializers import TrackSerializer, TrackCommentSerializer, TrackCommentDetailSerializer
-from .models import Track, TrackComment
+from .models import Track, TrackComment, TrackLikeLog
 from accounts.models import User
 
 import requests
@@ -144,7 +145,3 @@ def _get_unique_slug(title):
 		num += 1
 
 	return unique_slug
-
-
-class TrackLike(viewsets.ModelViewSet):
-	pass
