@@ -22,3 +22,7 @@ class PlayListLog(models.Model):
 
     class Meta:
         verbose_name_plural = '플레이리스트 로그'
+
+    
+    def __str__(self):
+        return self.user
