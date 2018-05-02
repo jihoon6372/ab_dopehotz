@@ -74,7 +74,7 @@ ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_REDIRECT_URL
 SECRET_KEY = 'zj7+c4182z+f$^t#76(x@l7&aytzjx7p-1aekeh%7ds0pd_sa7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 APPEND_SLASH = True
 # CSRF_COOKIE_SECURE = True
 
@@ -305,7 +305,6 @@ AUTHENTICATION_BACKENDS = [
     # 'social_core.backends.facebook.FacebookOAuth2', # Facebook
     # 'social_core.backends.soundcloud.SoundcloudOAuth2', # Soundcloud
     # 'social_core.backends.naver.NaverOAuth2', # Soundcloud
-
 
     # 'accounts.auth.SettingsBackend',
     'django.contrib.auth.backends.ModelBackend', # Django 기본 유저모델
