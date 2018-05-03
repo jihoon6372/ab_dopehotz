@@ -6,7 +6,8 @@ from django.utils.text import slugify
 
 class TrackManager(models.Manager):
 	def all(self):
-		qs = super(TrackManager, self).select_related('user').all()
+		# qs = super(TrackManager, self).select_related('user').all()
+		qs = super(TrackManager, self).select_related('user').filter(is_deleted=False)
 		return qs
 
 class Track(models.Model):
