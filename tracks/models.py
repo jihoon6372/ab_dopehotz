@@ -99,11 +99,11 @@ class Track(models.Model):
 
 class TrackCommentManager(models.Manager):
 	def all(self):
-		qs = super(TrackCommentManager, self).select_related('user').select_related('parent').filter(is_deleted=False)
+		qs = super(TrackCommentManager, self).select_related('user').select_related('parent').filter()
 		return qs
 
 	def filter_by_instance(self, instance):
-		qs = super(TrackCommentManager, self).select_related('user').select_related('parent').filter(track=instance.id, parent=None, is_deleted=False)
+		qs = super(TrackCommentManager, self).select_related('user').select_related('parent').filter(track=instance.id, parent=None)
 		return qs
 
 

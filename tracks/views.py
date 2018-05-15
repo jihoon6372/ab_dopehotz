@@ -108,8 +108,8 @@ class TrackCommentList(viewsets.ModelViewSet):
 	renderer_classes = (JSONRenderer, )
 
 	def get_queryset(self):
-		track = Track.objects.select_related('user').filter(track_id=self.kwargs['track'], is_deleted=False).first()
-		return TrackComment.objects.select_related('user').select_related('parent').filter(track=track.id, parent=None, is_deleted=False)
+		track = Track.objects.select_related('user').filter(track_id=self.kwargs['track']).first()
+		return TrackComment.objects.select_related('user').select_related('parent').filter(track=track.id, parent=None)
 
 	def perform_create(self, serializer):
 		track = Track.objects.select_related('user').filter(track_id=self.kwargs['track']).first()
@@ -127,7 +127,7 @@ class TrackCommentDetail(viewsets.ModelViewSet):
 	renderer_classes = (JSONRenderer, )
 
 	def get_queryset(self):
-		return TrackComment.objects.filter(pk=self.kwargs['pk'], is_deleted=False)
+		return TrackComment.objects.filter(pk=self.kwargs['pk'])
 
 	def perform_destroy(self, instance):
 		instance.is_deleted = True
