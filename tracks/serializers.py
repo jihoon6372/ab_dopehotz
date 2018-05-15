@@ -1,9 +1,13 @@
 from accounts.models import User
 from tracks.models import Track, TrackComment
-from rest_framework import serializers
-from social_django.models import UserSocialAuth
-from rest_framework.validators import UniqueTogetherValidator
 from home.serializers import DateTimeFieldWihTZ
+from logs.models import TrackLikeLog
+
+from social_django.models import UserSocialAuth
+from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
+
+
 # from rest_framework.decorators import detail_route
 
 class SocialSerializer(serializers.ModelSerializer):
@@ -42,7 +46,8 @@ class SubTrackCommentSerializer(serializers.ModelSerializer):
 	user = PersonSerializer(read_only=True)
 	#create_date = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
 	# replies = serializers.SerializerMethodField()
-	create_date = DateTimeFieldWihTZ(format='%Y-%m-%d %H:%M:%S')
+	# create_date = DateTimeFieldWihTZ(format='%Y-%m-%d %H:%M:%S')
+	create_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False)
 
 	class Meta:
 		model = TrackComment
@@ -53,6 +58,7 @@ class SubTrackCommentSerializer(serializers.ModelSerializer):
 			'parent',
 			'user',
 			'create_date',
+			'is_deleted'
 			# 'replies',
 		)
 
@@ -67,7 +73,21 @@ class TrackCommentSerializer(serializers.ModelSerializer):
 	user = PersonSerializer(read_only=True)
 	# reply_count = serializers.SerializerMethodField()
 	replies = serializers.SerializerMethodField(read_only=True)
-	create_date = DateTimeFieldWihTZ(format='%Y-%m-%d %H:%M:%S')
+	create_date = DateTimeFieldWihTZ(format='%Y-%m-%d %H:%M:%S', required=False)
+
+	def get_replies(self, obj):
+		if obj.children:
+			replies = SubTrackCommentSerializer(obj.children, many=True).data
+
+			for replie in replies:
+				if replie['is_deleted']:
+					replie['contents'] = '삭제된 덧글 입니다.'
+					del replie['is_deleted']
+
+			return replies
+
+		return None
+
 
 	class Meta:
 		model = TrackComment
@@ -79,7 +99,8 @@ class TrackCommentSerializer(serializers.ModelSerializer):
 			'user',
 			# 'reply_count',
 			'create_date',
-			'replies'
+			'replies',
+			'is_deleted'
 		)
 
 		read_only_fields = ('create_date',)
@@ -89,15 +110,12 @@ class TrackCommentSerializer(serializers.ModelSerializer):
 	# 		return obj.children.count()
 	# 	return 0
 
-	def get_replies(self, obj):
-		if obj.children:
-			return SubTrackCommentSerializer(obj.children, many=True).data
-		return None
+	
 
 
 class TrackCommentDetailSerializer(serializers.ModelSerializer):
 	user = PersonSerializer(read_only=True)
-	create_date = DateTimeFieldWihTZ(format='%Y-%m-%d %H:%M:%S')
+	create_date = DateTimeFieldWihTZ(format='%Y-%m-%d %H:%M:%S', required=False)
 
 	class Meta:
 		model = TrackComment
@@ -114,7 +132,7 @@ class TrackCommentDetailSerializer(serializers.ModelSerializer):
 
 class TrackSerializer(serializers.ModelSerializer):
 	user = PersonSerializer(read_only=True)
-	create_date = DateTimeFieldWihTZ(format='%Y-%m-%d %H:%M:%S')
+	create_date = DateTimeFieldWihTZ(format='%Y-%m-%d %H:%M:%S', required=False)
 	
 	def get_comment_count(self, obj):
 		return obj.comment.count()
@@ -122,6 +140,12 @@ class TrackSerializer(serializers.ModelSerializer):
 	def get_comment(self, obj):
 		c_qs = TrackComment.objects.filter_by_instance(obj)
 		comments = TrackCommentSerializer(c_qs, many=True).data
+
+		for comment in comments:
+			if comment['is_deleted']:
+				comment['contents'] = '삭제된 덧글 입니다.'
+				del comment['is_deleted']
+
 		return comments
 
 	comment_count = serializers.SerializerMethodField()
@@ -166,3 +190,19 @@ class TrackSerializer(serializers.ModelSerializer):
 			'waveform_url',
 			'test_date_time'
 		)
+
+
+class TrackLikeSerializer(serializers.ModelSerializer):
+	user = PersonSerializer(read_only=True)
+	# create_date = DateTimeFieldWihTZ(format='%Y-%m-%d %H:%M:%S', required=False)
+
+	class Meta:
+		model = TrackLikeLog
+		fields = (
+			'id',
+			'user',
+			'track',
+			'create_date'
+		)
+
+		read_only_fields = ('track', 'create_date')
